@@ -220,6 +220,7 @@ Love nyanBOX? Here's how you can help:
 - [opendroneid-core-c](https://github.com/opendroneid/opendroneid-core-c)
 - [ESP Web Tools](https://esphome.github.io/esp-web-tools/)
 - [Flock You](https://github.com/colonelpanichacks/flock-you)
+- [RF24](https://github.com/nRF24/RF24) 
 - [Original nRFBOX Project](https://github.com/cifertech/nrfbox)
 
 And thanks to everyone who's contributed code, reported bugs, purchased a device, or just shared the love. You're awesome!
