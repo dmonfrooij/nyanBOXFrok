@@ -168,21 +168,7 @@ void wakeDisplay() {
 }
 
 void checkIdle() {
-  if (idleTimeout == 0) {
-    return;
-  }
-
-  if (!displayOff && millis() - lastActivity >= idleTimeout) {
-    u8g2.setPowerSave(1);
-    displayOff = true;
-    return;
-  }
-  if (displayOff && anyButtonPressed()) {
-    delay(10);
-    if (anyButtonPressed()) {
-      wakeDisplay();
-    }
-  }
+  return;
 }
 
 const int ITEM_HEIGHT = 16;
@@ -542,6 +528,7 @@ void setup() {
   dangerousActionsEnabled = false;
 
   loadSleepTimeoutFromEEPROM();
+  idleTimeout = 0;
 
   uint8_t continuousScanValue = EEPROM.read(4);
   if (continuousScanValue == 0xFF) {
@@ -557,9 +544,14 @@ void setup() {
     privacyModeEnabled = (privacyModeValue == 1);
   }
 
+#ifdef U8X8_HAVE_HW_I2C
+  Wire.begin(21, 22);
+#endif
   u8g2.begin();
   u8g2.setContrast(oledBrightness);
   u8g2.setBitmapMode(1);
+  u8g2.setPowerSave(0);
+  displayOff = false;
 
   updateLastActivity();
 
