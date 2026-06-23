@@ -31,7 +31,7 @@
 
 **nyanBOX** is your pocket-sized 2.4GHz wireless lab. Think of it as a swiss army knife for the entire 2.4GHz spectrum - Bluetooth, BLE, WiFi, and everything in between. Perfect for security researchers, pentesters, hackers, and curious tinkerers who want to understand how wireless protocols really work.
 
-Built around an ESP32 with triple NRF24 modules, a crisp OLED display, and a 2500mAh rechargeable battery, nyanBOX lets you explore the invisible world of 2.4GHz radio anywhere - no cables needed. Scan for hidden Bluetooth devices, detect AirTags tracking you, find credit card skimmers, analyze RF signals, test wireless security, and way more.
+Built around an ESP32 with an NRF24 module, a crisp OLED display, and a 2500mAh rechargeable battery, nyanBOX lets you explore the invisible world of 2.4GHz radio anywhere - no cables needed. Scan for hidden Bluetooth devices, detect AirTags tracking you, find credit card skimmers, analyze RF signals, test wireless security, and way more.
 
 **→ [Check out all the features at nyandevices.com](https://nyandevices.com)**
 
@@ -123,7 +123,7 @@ Hit RIGHT in the main menu to check your stats. Level up by tinkering with RF si
 | Component  | Details                                  |
 |-----------:|------------------------------------------|
 | Microcontroller      | ESP32 WROOM‑32U (dual‑core, Wi‑Fi + BT)  |
-| Wireless Modules     | 3× NRF24 GTmini modules        |
+| Wireless Modules     | 1× NRF24 GTmini module        |
 | Display    | 0.96" OLED                               |
 | Power      | USB‑C + 2500mAh rechargeable battery     |
 | Battery    | Up to a full day typical use             |
@@ -154,6 +154,16 @@ Get up and running or update to the latest features:
 - Can't find the port? Install [CP210x drivers](https://www.silabs.com/developers/usb-to-uart-bridge-vcp-drivers)
 - Upload failing? Hold the BOOT button while flashing
 - Still stuck? Hit up our [Discord](https://discord.gg/J5A3zDC2y8) - we're here to help!
+
+#### Local Build & Flash (ESP32 Wroom32U)
+1. Install [PlatformIO Core](https://docs.platformio.org/en/latest/core/installation/index.html) (`pip install platformio`).
+2. Open `/home/runner/work/nyanBOXFrok/nyanBOXFrok/firmware-files/old/legacy-src/VScode Platformio`.
+3. Build firmware:
+   - `pio run -e nyanbox-main`
+4. Flash to board (replace port as needed):
+   - `pio run -e nyanbox-main -t upload --upload-port /dev/ttyUSB0`
+5. Optional serial monitor:
+   - `pio device monitor -b 115200 -p /dev/ttyUSB0`
 
 ---
 
