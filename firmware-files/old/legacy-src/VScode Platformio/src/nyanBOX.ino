@@ -568,9 +568,9 @@ void setup() {
   Serial.println("BOOT: settings loaded");
 
 #ifdef U8X8_HAVE_HW_I2C
-  Serial.println("BOOT: before Wire.begin(21,22)");
-  Wire.begin(21, 22);
-  Serial.println("BOOT: after Wire.begin(21,22)");
+  Serial.println("BOOT: before Wire.begin(22,21)");
+  Wire.begin(22, 21);
+  Serial.println("BOOT: after Wire.begin(22,21)");
 #endif
   Serial.println("BOOT: before u8g2.begin");
   u8g2.begin();
