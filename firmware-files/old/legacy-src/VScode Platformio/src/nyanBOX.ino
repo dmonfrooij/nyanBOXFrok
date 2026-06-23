@@ -71,10 +71,9 @@
 #include "../include/radio_manager.h"
 
 RF24 radios[] = {
-  RF24(RADIO_CE_PIN_1, RADIO_CSN_PIN_1),
-  RF24(RADIO_CE_PIN_2, RADIO_CSN_PIN_2),
-  RF24(RADIO_CE_PIN_3, RADIO_CSN_PIN_3)
+  RF24(RADIO_CE_PIN_1, RADIO_CSN_PIN_1)
 };
+int RADIO_COUNT = sizeof(radios) / sizeof(radios[0]);
 
 U8G2_SSD1306_128X64_NONAME_F_HW_I2C u8g2(U8G2_R0, U8X8_PIN_NONE);
 Adafruit_NeoPixel pixels(1, NEOPIXEL_PIN, NEO_GRB + NEO_KHZ800);
@@ -514,10 +513,10 @@ void setup() {
   neopixelSetup();
   SPI.begin();
 
-  int cePins[] = {RADIO_CE_PIN_1, RADIO_CE_PIN_2, RADIO_CE_PIN_3};
-  int csnPins[] = {RADIO_CSN_PIN_1, RADIO_CSN_PIN_2, RADIO_CSN_PIN_3};
+  int cePins[] = {RADIO_CE_PIN_1};
+  int csnPins[] = {RADIO_CSN_PIN_1};
 
-  for (int i = 0; i < 3; i++) {
+  for (int i = 0; i < RADIO_COUNT; i++) {
     pinMode(cePins[i], OUTPUT);
     pinMode(csnPins[i], OUTPUT);
     digitalWrite(csnPins[i], HIGH);
@@ -525,7 +524,7 @@ void setup() {
   }
   delay(100);
 
-  for (int i = 0; i < 3; i++) {
+  for (int i = 0; i < RADIO_COUNT; i++) {
     if (!radios[i].begin() || !radios[i].isChipConnected()) {
       while(true) { delay(1000); }
     }

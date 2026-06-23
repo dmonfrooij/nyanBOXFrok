@@ -19,7 +19,8 @@
 #include <Arduino.h>
 #include <RF24.h>
 
-extern RF24 radios[3];
+extern RF24 radios[];
+extern int RADIO_COUNT;
 
 static bool classicBtMemReleased = false;
 
@@ -88,7 +89,9 @@ bool initWiFi(wifi_mode_t mode) {
 }
 
 void cleanupRadio() {
-    for (auto &r : radios) r.powerDown();
+    for (int i = 0; i < RADIO_COUNT; i++) {
+        radios[i].powerDown();
+    }
     cleanupWiFi();
     cleanupBLE();
 }
