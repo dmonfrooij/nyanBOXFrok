@@ -87,6 +87,7 @@ Built around an ESP32 with an NRF24 module, a crisp OLED display, and a 2500mAh 
 - **Tile Detector** - Scans for and identifies nearby Tile Tracker devices.
 - **RayBan Detector** - Scans for and identifies nearby RayBan Meta smart glasses.
 - **iBeacon Detector** – Scans for and decodes Apple iBeacon BLE advertisements in real time. iBeacons are deployed in stores, airports, malls, and stadiums to track your movement and behavior.
+- **iBeacon Spoofer** - Detects, clones, and rebroadcasts nearby Apple iBeacon advertisements. Clone individual beacons or all detected beacons simultaneously. By introducing duplicate beacon identifiers into the environment, iBeacon Spoofer can throw off beacon-based positioning systems and reduce the accuracy of indoor location tracking, movement analytics, and location-aware profiling used by retailers, venues, and third-party applications.
 - **BLE Spammer** – Broadcasts BLE advertisement packets for testing
 - **Swift Pair** - Triggers Windows Swift Pair notifications by broadcasting fake Microsoft device advertisements.
 - **Sour Apple** – Mimics Apple Bluetooth signals like AirPods pairing pop-up to test device resilience against protocol exploits.
