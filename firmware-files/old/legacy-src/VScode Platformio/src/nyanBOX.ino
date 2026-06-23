@@ -495,9 +495,14 @@ void runApp(MenuItem &mi) {
 
 void setup() {
   Serial.begin(115200);
+  delay(200);
+  Serial.println("BOOT: setup start");
 
   neopixelSetup();
+  Serial.println("BOOT: neopixel ok");
+
   SPI.begin();
+  Serial.println("BOOT: spi begin ok");
 
   int cePins[] = {RADIO_CE_PIN_1};
   int csnPins[] = {RADIO_CSN_PIN_1};
@@ -508,12 +513,24 @@ void setup() {
     digitalWrite(csnPins[i], HIGH);
     digitalWrite(cePins[i], LOW);
   }
+  Serial.println("BOOT: radio pins configured");
   delay(100);
 
   for (int i = 0; i < RADIO_COUNT; i++) {
-    if (!radios[i].begin() || !radios[i].isChipConnected()) {
-      while(true) { delay(1000); }
+    Serial.print("BOOT: init radio ");
+    Serial.println(i);
+    bool radioBegin = radios[i].begin();
+    bool radioConnected = radioBegin && radios[i].isChipConnected();
+    Serial.print("BOOT: radio begin=");
+    Serial.print(radioBegin ? "true" : "false");
+    Serial.print(" connected=");
+    Serial.println(radioConnected ? "true" : "false");
+
+    if (!radioConnected) {
+      Serial.println("BOOT: radio failed, continuing without hard stop");
+      continue;
     }
+
     radios[i].setAutoAck(false);
     radios[i].stopListening();
     radios[i].setRetries(0,0);
@@ -521,14 +538,19 @@ void setup() {
     radios[i].setDataRate(RF24_2MBPS);
     radios[i].setCRCLength(RF24_CRC_DISABLED);
   }
+  Serial.println("BOOT: radio init done");
 
   EEPROM.begin(512);
+  Serial.println("BOOT: eeprom begin ok");
   oledBrightness = EEPROM.read(1);
+  Serial.print("BOOT: oledBrightness=");
+  Serial.println(oledBrightness);
 
   dangerousActionsEnabled = false;
 
   loadSleepTimeoutFromEEPROM();
   idleTimeout = 0;
+  Serial.println("BOOT: idle disabled");
 
   uint8_t continuousScanValue = EEPROM.read(4);
   if (continuousScanValue == 0xFF) {
@@ -543,15 +565,21 @@ void setup() {
   } else {
     privacyModeEnabled = (privacyModeValue == 1);
   }
+  Serial.println("BOOT: settings loaded");
 
 #ifdef U8X8_HAVE_HW_I2C
+  Serial.println("BOOT: before Wire.begin(21,22)");
   Wire.begin(21, 22);
+  Serial.println("BOOT: after Wire.begin(21,22)");
 #endif
+  Serial.println("BOOT: before u8g2.begin");
   u8g2.begin();
+  Serial.println("BOOT: after u8g2.begin");
   u8g2.setContrast(oledBrightness);
   u8g2.setBitmapMode(1);
   u8g2.setPowerSave(0);
   displayOff = false;
+  Serial.println("BOOT: oled configured");
 
   updateLastActivity();
 
@@ -580,12 +608,16 @@ void setup() {
   u8g2.setCursor((128 - verW) / 2, 62);
   u8g2.print(nyanboxVersion);
 
+  Serial.println("BOOT: before first sendBuffer");
   u8g2.sendBuffer();
+  Serial.println("BOOT: after first sendBuffer");
   delay(2000);
 
   u8g2.clearBuffer();
   u8g2.drawXBMP(0, 0, 128, 64, logo_nyanbox);
+  Serial.println("BOOT: before logo sendBuffer");
   u8g2.sendBuffer();
+  Serial.println("BOOT: after logo sendBuffer");
   delay(1500);
 
   pinMode(BUTTON_PIN_UP, INPUT_PULLUP);
@@ -593,16 +625,20 @@ void setup() {
   pinMode(BUTTON_PIN_DOWN, INPUT_PULLUP);
   pinMode(BUTTON_PIN_RIGHT, INPUT_PULLUP);
   pinMode(BUTTON_PIN_LEFT, INPUT_PULLUP);
+  Serial.println("BOOT: buttons configured");
 
   levelSystemSetup();
+  Serial.println("BOOT: level system ok");
 
   initNyanboxAdvertiser();
   startNyanboxAdvertiser();
+  Serial.println("BOOT: advertiser started");
 
   if (passwordEnabled()) { checkPasswordOnBoot(); }
 
   enterMenu(APP_MAIN);
   displayMirrorSetup();
+  Serial.println("BOOT: setup complete");
 }
 
 void loop() {
